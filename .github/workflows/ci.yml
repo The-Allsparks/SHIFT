@@ -73,6 +73,8 @@ jobs:
           test -f docs/audits/initial-deep-audit.md
           test -f docs/audits/priority-ledger.md
           test -f docs/release.md
+          test -f docs/INSTALL.md
+          test -f docs/TEACHING.md
           test -f schema/shift-profile-v1.json
           test -f examples/profiles/competition-example.json
           test -f examples/profiles/fallback.json
