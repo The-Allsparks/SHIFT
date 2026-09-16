@@ -19,33 +19,33 @@ import org.junit.jupiter.api.Test;
 class ProfileBankTest {
     @Test
     void personSlashSetBecomesCanonicalId() {
-        ProfileId id = ProfileId.of("garrett/offense", "", "");
-        assertEquals("garrett/offense", id.id());
-        assertEquals("garrett", id.person());
+        ProfileId id = ProfileId.of("studenta/offense", "", "");
+        assertEquals("studenta/offense", id.id());
+        assertEquals("studenta", id.person());
         assertEquals("offense", id.set());
         assertTrue(id.grouped());
     }
 
     @Test
     void personAndSetFieldsRewriteId() {
-        ProfileId id = ProfileId.of("ignored", "Garrett", "Defense");
-        assertEquals("garrett/defense", id.id());
-        assertEquals("garrett", id.person());
+        ProfileId id = ProfileId.of("ignored", "StudentA", "Defense");
+        assertEquals("studenta/defense", id.id());
+        assertEquals("studenta", id.person());
         assertEquals("defense", id.set());
     }
 
     @Test
     void bankGroupsSetsAndComposesRoles() {
         ProfileBank bank = ProfileBank.builder(ShiftFixtures.exampleIntents())
-                .addJson(driverJson("garrett/general", "RIGHT_BUMPER"))
-                .addJson(driverJson("garrett/offense", "LEFT_BUMPER"))
-                .addJson(operatorJson("sam/general"))
+                .addJson(driverJson("studenta/general", "RIGHT_BUMPER"))
+                .addJson(driverJson("studenta/offense", "LEFT_BUMPER"))
+                .addJson(operatorJson("studentb/general"))
                 .build();
         assertEquals(3, bank.size());
-        assertTrue(bank.persons().contains("garrett"));
-        assertTrue(bank.sets("garrett").contains("offense"));
-        Profile session = bank.compose("garrett", "offense", "sam", "general");
-        assertEquals("garrett/offense+sam/general", session.id());
+        assertTrue(bank.persons().contains("studenta"));
+        assertTrue(bank.sets("studenta").contains("offense"));
+        Profile session = bank.compose("studenta", "offense", "studentb", "general");
+        assertEquals("studenta/offense+studentb/general", session.id());
         assertTrue(session.controllers().containsKey(ControllerRole.DRIVER));
         assertTrue(session.controllers().containsKey(ControllerRole.CODRIVER));
 
@@ -66,9 +66,9 @@ class ProfileBankTest {
     @Test
     void activateSwitchesCompiledProfileWithoutJson() {
         ProfileBank bank = ProfileBank.builder(ShiftFixtures.exampleIntents())
-                .addJson(driverJson("garrett/general", "RIGHT_BUMPER"))
-                .addJson(driverJson("garrett/offense", "LEFT_BUMPER"))
-                .addJson(operatorJson("sam/general"))
+                .addJson(driverJson("studenta/general", "RIGHT_BUMPER"))
+                .addJson(driverJson("studenta/offense", "LEFT_BUMPER"))
+                .addJson(operatorJson("studentb/general"))
                 .build();
         ManualClock clock = new ManualClock(1000);
         SimulatedInputDevice driver = ShiftFixtures.driver(clock);
@@ -76,14 +76,14 @@ class ProfileBankTest {
         RecordingEventSink sink = new RecordingEventSink();
         Shift shift = ShiftFixtures.base(driver, codriver)
                 .eventSink(sink)
-                .loadProfile(bank.compose("garrett/general", "sam/general"))
+                .loadProfile(bank.compose("studenta/general", "studentb/general"))
                 .build();
         driver.hold(Control.RIGHT_BUMPER);
         assertTrue(shift.update().held("drive.slow"));
-        shift.activate(bank.compose("garrett/offense", "sam/general"));
-        assertEquals("garrett/offense+sam/general", shift.profile().id());
+        shift.activate(bank.compose("studenta/offense", "studentb/general"));
+        assertEquals("studenta/offense+studentb/general", shift.profile().id());
         assertEquals(
-                "garrett/offense+sam/general",
+                "studenta/offense+studentb/general",
                 sink.last(ShiftEventType.PROFILE_LOADED).field("profile"));
         driver.release(Control.RIGHT_BUMPER);
         driver.hold(Control.LEFT_BUMPER);
@@ -93,24 +93,24 @@ class ProfileBankTest {
     @Test
     void jsonPersonSetFieldsBecomeCanonicalId() {
         ProfileBank bank = ProfileBank.builder(ShiftFixtures.exampleIntents())
-                .addJson("{ \"schemaVersion\": 1, \"person\": \"Garrett\", \"set\": \"Red\", \"controllers\": {"
+                .addJson("{ \"schemaVersion\": 1, \"person\": \"StudentA\", \"set\": \"Red\", \"controllers\": {"
                         + "\"driver\": { \"slot\": 1, \"defaultLayer\": \"drive\" }"
                         + "}, \"layers\": { \"drive\": { \"controller\": \"driver\", \"bindings\": [] } } }")
                 .build();
-        assertEquals("garrett/red", bank.require("garrett", "red").id());
-        assertEquals("garrett", bank.require("garrett/red").person());
-        assertEquals("red", bank.require("garrett/red").set());
+        assertEquals("studenta/red", bank.require("studenta", "red").id());
+        assertEquals("studenta", bank.require("studenta/red").person());
+        assertEquals("red", bank.require("studenta/red").set());
     }
 
     @Test
     void composeRejectsDriverFileWithoutDriverController() {
         final ProfileBank bank = ProfileBank.builder(ShiftFixtures.exampleIntents())
-                .addJson(operatorJson("sam/general"))
+                .addJson(operatorJson("studentb/general"))
                 .build();
         assertThrows(ConfigException.class, new org.junit.jupiter.api.function.Executable() {
             @Override
             public void execute() {
-                bank.compose("sam/general", "sam/general");
+                bank.compose("studentb/general", "studentb/general");
             }
         });
     }
@@ -118,7 +118,7 @@ class ProfileBankTest {
     @Test
     void unknownProfileFails() {
         ProfileBank bank = ProfileBank.builder(ShiftFixtures.exampleIntents())
-                .addJson(driverJson("garrett/general", "RIGHT_BUMPER"))
+                .addJson(driverJson("studenta/general", "RIGHT_BUMPER"))
                 .build();
         assertThrows(ConfigException.class, new org.junit.jupiter.api.function.Executable() {
             @Override

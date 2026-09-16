@@ -156,27 +156,27 @@ Profiles are versioned JSON:
 
 Roles are application-defined. `driver` / `codriver` / `test` are conventions, not a closed enum.
 
-Named per-driver maps use optional `person` and `set` (canonical id `garrett/offense`). Load them into a `ProfileBank` at `init()`, compose driver + operator, then `activate` between matches — never from `update()`:
+Named per-driver maps use optional `person` and `set` (canonical id `studenta/offense`). Load them into a `ProfileBank` at `init()`, compose driver + operator, then `activate` between matches — never from `update()`:
 
 ```java
 ProfileBank bank = ProfileBank.builder(MyRobotIntents.all())
-    .addJson(garrettGeneral)
-    .addJson(garrettOffense)
-    .addJson(samGeneral)
+    .addJson(studentAGeneral)
+    .addJson(studentAOffense)
+    .addJson(studentBGeneral)
     .build();
 
 Shift shift = FtcShift.builder(gamepad1, gamepad2)
     .registerIntents(MyRobotIntents.all())
-    .loadProfile(bank.compose("garrett/offense", "sam/general"))
+    .loadProfile(bank.compose("studenta/offense", "studentb/general"))
     .eventSink(CompositeEventSink.of(echoAdapter, telemetrySink))
     .inputListener(traceSnapshotAdapter)
     .build();
 
 // init_loop or between matches, not inside loop():
-shift.activate(bank.compose("garrett/defense", "sam/general"));
+shift.activate(bank.compose("studenta/defense", "studentb/general"));
 ```
 
-Person-role files for gamepad 1 declare `controllers.driver` only; operator files declare `controllers.codriver`. Examples: `examples/profiles/garrett-offense.json` and `examples/profiles/sam-general.json`.
+Person-role files for gamepad 1 declare `controllers.driver` only; operator files declare `controllers.codriver`. Examples: `examples/profiles/studenta-offense.json` and `examples/profiles/studentb-general.json`.
 
 JSON Schema for editor autocomplete: [schema/shift-profile-v1.json](schema/shift-profile-v1.json).
 
