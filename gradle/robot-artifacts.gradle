@@ -1,0 +1,72 @@
+// Assert the robot-facing artifact set is shift-core + shift-ftc.
+// Stubs remain compileOnly/testImplementation for desktop JVM tests.
+
+def forbiddenRobotModules = [':shift-ftc-stubs'] as Set
+def forbiddenArtifactNames = ['shift-ftc-stubs'] as Set
+
+gradle.projectsEvaluated {
+    def ftcProject = project(':shift-ftc')
+    ftcProject.tasks.register('assertRobotFacingClasspath') {
+        group = 'verification'
+        description = 'Fail if stubs appear on shift-ftc api/implementation/runtime.'
+        dependsOn ftcProject.tasks.named('generatePomFileForMavenJavaPublication')
+        doLast {
+            def violations = []
+            ['api', 'implementation', 'runtimeOnly', 'runtimeClasspath'].each { name ->
+                def configuration = ftcProject.configurations.findByName(name)
+                if (configuration == null) {
+                    return
+                }
+                configuration.dependencies.withType(ProjectDependency).each { dependency ->
+                    def path = dependency.path
+                    if (forbiddenRobotModules.contains(path)) {
+                        violations << "${name} project ${path}"
+                    }
+                }
+            }
+            def pomFile = ftcProject.layout.buildDirectory.file('publications/mavenJava/pom-default.xml').get().asFile
+            if (!pomFile.isFile()) {
+                throw new GradleException("Missing generated shift-ftc POM at ${pomFile}")
+            }
+            def pomText = pomFile.getText('UTF-8')
+            forbiddenArtifactNames.each { name ->
+                if (pomText.contains("<artifactId>${name}</artifactId>")) {
+                    violations << "shift-ftc POM depends on ${name}"
+                }
+            }
+            if (!violations.isEmpty()) {
+                throw new GradleException(
+                        "shift-ftc robot classpath includes stubs:\n  "
+                                + violations.join('\n  '))
+            }
+        }
+    }
+
+    ftcProject.tasks.named('check') {
+        dependsOn 'assertRobotFacingClasspath'
+    }
+}
+
+tasks.register('assertRobotFacingArtifacts') {
+    group = 'verification'
+    description = 'Robot-facing assembleReleaseArtifacts is shift-core and shift-ftc only.'
+    dependsOn ':shift-ftc:assertRobotFacingClasspath'
+    doLast {
+        def actual = tasks.named('assembleReleaseArtifacts').get().dependsOn.flatten() as Set
+        def expected = [':shift-core:assemble', ':shift-ftc:assemble'] as Set
+        if (actual != expected) {
+            throw new GradleException(
+                    "assembleReleaseArtifacts depends on ${actual}, expected ${expected}. "
+                            + 'Stubs are not robot-facing artifacts.')
+        }
+        forbiddenRobotModules.each { path ->
+            if (project(path).pluginManager.hasPlugin('maven-publish')) {
+                throw new GradleException("${path} must not apply maven-publish")
+            }
+        }
+    }
+}
+
+tasks.named('check') {
+    dependsOn 'assertRobotFacingArtifacts'
+}

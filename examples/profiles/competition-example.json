@@ -1,0 +1,222 @@
+{
+  "$schema": "../../../schema/shift-profile-v1.json",
+  "schemaVersion": 1,
+  "id": "competition-example",
+  "name": "AllSparks-style competition example",
+  "description": "Non-production demonstration of SHIFT roles, layers, analog transforms, chords, and semantic feedback. Intents are semantic only: no motor powers, encoder counts, or servo positions.",
+  "controllers": {
+    "driver": {
+      "slot": 1,
+      "defaultLayer": "drive",
+      "model": "iwgame-wired-ps5"
+    },
+    "codriver": {
+      "slot": 2,
+      "defaultLayer": "mechanism"
+    }
+  },
+  "layers": {
+    "drive": {
+      "controller": "driver",
+      "bindings": [
+        {
+          "id": "drive-translation",
+          "intent": "drive.translation",
+          "event": "ANALOG",
+          "x": {
+            "source": "LEFT_STICK_X",
+            "transform": {
+              "deadband": 0.08,
+              "exponent": 1.8
+            }
+          },
+          "y": {
+            "source": "LEFT_STICK_Y",
+            "transform": {
+              "deadband": 0.08,
+              "invert": true,
+              "exponent": 1.8
+            }
+          }
+        },
+        {
+          "id": "drive-rotation",
+          "source": "RIGHT_STICK_X",
+          "intent": "drive.rotation",
+          "event": "ANALOG",
+          "transform": {
+            "deadband": 0.08,
+            "exponent": 1.6
+          }
+        },
+        {
+          "id": "drive-cor-longitudinal",
+          "source": "RIGHT_STICK_Y",
+          "intent": "drive.cor.longitudinal",
+          "event": "ANALOG",
+          "transform": {
+            "deadband": 0.08,
+            "invert": true,
+            "scale": 1.0
+          }
+        },
+        {
+          "id": "drive-slow",
+          "source": "RIGHT_BUMPER",
+          "event": "WHILE_HELD",
+          "intent": "drive.slow"
+        },
+        {
+          "id": "drive-precision-trigger",
+          "when": {
+            "gt": {
+              "source": "RIGHT_TRIGGER",
+              "value": 0.7
+            }
+          },
+          "event": "WHILE_HELD",
+          "intent": "drive.slow",
+          "allowOverlap": true
+        },
+        {
+          "id": "helm-acquire",
+          "source": "CIRCLE",
+          "event": "WHILE_HELD",
+          "intent": "helm.acquire"
+        },
+        {
+          "id": "helm-score",
+          "source": "X",
+          "event": "ON_PRESS",
+          "intent": "helm.score"
+        }
+      ]
+    },
+    "mechanism": {
+      "controller": "codriver",
+      "bindings": [
+        {
+          "id": "intake-collect",
+          "source": "A",
+          "event": "WHILE_HELD",
+          "intent": "intake.collect"
+        },
+        {
+          "id": "elevator-high",
+          "source": "Y",
+          "event": "ON_PRESS",
+          "intent": "elevator.score.high"
+        },
+        {
+          "id": "elevator-low",
+          "source": "B",
+          "event": "ON_PRESS",
+          "intent": "elevator.score.low"
+        },
+        {
+          "id": "safe-retract",
+          "when": {
+            "all": ["LEFT_BUMPER", "Y"]
+          },
+          "event": "ON_PRESS",
+          "intent": "system.safeRetract"
+        }
+      ]
+    },
+    "vision": {
+      "controller": "codriver",
+      "bindings": [
+        {
+          "id": "vision-next",
+          "source": "A",
+          "event": "ON_PRESS",
+          "intent": "vision.nextTarget"
+        },
+        {
+          "id": "vision-lock",
+          "source": "Y",
+          "event": "ON_PRESS",
+          "intent": "vision.lockTarget"
+        }
+      ]
+    },
+    "system": {
+      "controller": "codriver",
+      "bindings": [
+        {
+          "id": "system-safe-retract",
+          "source": "Y",
+          "event": "ON_PRESS",
+          "intent": "system.safeRetract"
+        }
+      ]
+    },
+    "calibration": {
+      "controller": "codriver",
+      "bindings": [
+        {
+          "id": "calibration-home",
+          "source": "A",
+          "event": "ON_PRESS",
+          "intent": "calibration.home"
+        }
+      ]
+    }
+  },
+  "bindings": [
+    {
+      "id": "codriver-layer-mechanism",
+      "role": "codriver",
+      "source": "DPAD_LEFT",
+      "event": "ON_PRESS",
+      "setLayer": "mechanism"
+    },
+    {
+      "id": "codriver-layer-vision",
+      "role": "codriver",
+      "source": "DPAD_RIGHT",
+      "event": "ON_PRESS",
+      "setLayer": "vision"
+    },
+    {
+      "id": "codriver-layer-system",
+      "role": "codriver",
+      "source": "DPAD_UP",
+      "event": "ON_PRESS",
+      "setLayer": "system"
+    },
+    {
+      "id": "codriver-layer-calibration",
+      "role": "codriver",
+      "source": "DPAD_DOWN",
+      "event": "ON_PRESS",
+      "setLayer": "calibration"
+    }
+  ],
+  "feedback": {
+    "TARGET_ACQUIRED": {
+      "role": "driver",
+      "rumble": "short",
+      "led": {
+        "r": 0.0,
+        "g": 1.0,
+        "b": 0.0,
+        "durationMs": 250
+      }
+    },
+    "ACTION_REJECTED": {
+      "role": "codriver",
+      "rumble": "double"
+    },
+    "LAYER_CHANGED": {
+      "role": "codriver",
+      "rumble": "pulse",
+      "led": {
+        "r": 0.1,
+        "g": 0.4,
+        "b": 1.0,
+        "durationMs": 200
+      }
+    }
+  }
+}

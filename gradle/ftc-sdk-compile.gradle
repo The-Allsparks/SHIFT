@@ -1,0 +1,142 @@
+// Compile shift-ftc and shift-examples against official FTC SDK artifacts
+// instead of shift-ftc-stubs. Default `check` still uses stubs so desktop
+// unit tests and local builds do not require Android.
+//
+//   ./gradlew compileAgainstFtcSdk
+//   ./gradlew compileAgainstFtcSdk -Pshift.skipFtcSdkCompile=true
+
+configurations {
+    ftcSdkAar {
+        canBeConsumed = false
+        canBeResolved = true
+        visible = false
+        transitive = false
+    }
+    androidCompileJar {
+        canBeConsumed = false
+        canBeResolved = true
+        visible = false
+        transitive = false
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    ftcSdkAar "org.firstinspires.ftc:RobotCore:${ftcSdkVersion}@aar"
+    androidCompileJar 'com.google.android:android:4.1.1.4'
+}
+
+def ftcSdkJarsDir = layout.buildDirectory.dir('ftc-sdk-jars')
+def robotCoreClassesJar = layout.buildDirectory.file("ftc-sdk-jars/RobotCore-${ftcSdkVersion}-classes.jar")
+def androidCompileJarFile = layout.buildDirectory.file('ftc-sdk-jars/android-compile.jar')
+
+def extractFtcSdkJars = tasks.register('extractFtcSdkJars') {
+    group = 'verification'
+    description = "Extract classes.jar from FTC SDK ${ftcSdkVersion} AARs."
+    inputs.files(configurations.ftcSdkAar)
+    inputs.files(configurations.androidCompileJar)
+    outputs.file(robotCoreClassesJar)
+    outputs.file(androidCompileJarFile)
+    onlyIf { findProperty('shift.skipFtcSdkCompile') != 'true' }
+    doLast {
+        def destDir = ftcSdkJarsDir.get().asFile
+        project.delete(destDir)
+        destDir.mkdirs()
+
+        def androidSrc = configurations.androidCompileJar.singleFile
+        def androidDest = androidCompileJarFile.get().asFile
+        project.copy {
+            from androidSrc
+            into destDir
+            rename { 'android-compile.jar' }
+        }
+        if (!androidDest.isFile()) {
+            throw new GradleException("Failed to copy Android compile jar from ${androidSrc}.")
+        }
+
+        def artifacts = configurations.ftcSdkAar.resolvedConfiguration.resolvedArtifacts
+        if (artifacts.isEmpty()) {
+            throw new GradleException("No FTC SDK artifacts resolved. Expected RobotCore ${ftcSdkVersion} from Maven Central.")
+        }
+        artifacts.each { artifact ->
+            logger.lifecycle("FTC SDK compile artifact: ${artifact.moduleVersion.id} (${artifact.file.name})")
+            def outName = "${artifact.name}-${artifact.moduleVersion.id.version}-classes.jar"
+            copy {
+                from zipTree(artifact.file)
+                include 'classes.jar'
+                into destDir
+                rename { outName }
+            }
+        }
+        def extracted = robotCoreClassesJar.get().asFile
+        if (!extracted.isFile()) {
+            throw new GradleException("Failed to extract ${extracted.name} from RobotCore ${ftcSdkVersion}.")
+        }
+    }
+}
+
+def skipSdkCompile = {
+    findProperty('shift.skipFtcSdkCompile') == 'true'
+}
+
+gradle.projectsEvaluated {
+    def ftcProject = project(':shift-ftc')
+    ftcProject.tasks.register('compileAgainstFtcSdk', JavaCompile) {
+        group = 'verification'
+        description = "Compile shift-ftc against org.firstinspires.ftc:RobotCore:${ftcSdkVersion} (not stubs)."
+        dependsOn extractFtcSdkJars, ':shift-core:classes'
+        onlyIf { !skipSdkCompile() }
+        source = ftcProject.sourceSets.main.java
+        destinationDirectory.set(ftcProject.layout.buildDirectory.dir('classes-ftc-sdk/java/main'))
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+        options.encoding = 'UTF-8'
+        options.compilerArgs += ['-Xlint:unchecked', '-Xlint:deprecation']
+        classpath = files(
+                project(':shift-core').sourceSets.main.output,
+                robotCoreClassesJar,
+                androidCompileJarFile
+        )
+        doFirst {
+            logger.lifecycle("Compiling ${ftcProject.path} against FTC SDK ${ftcSdkVersion}")
+        }
+    }
+
+    def examplesProject = project(':shift-examples')
+    examplesProject.tasks.register('compileAgainstFtcSdk', JavaCompile) {
+        group = 'verification'
+        description = "Compile shift-examples against org.firstinspires.ftc:RobotCore:${ftcSdkVersion} (not stubs)."
+        dependsOn extractFtcSdkJars, ':shift-core:classes', ':shift-ftc:classes'
+        onlyIf { !skipSdkCompile() }
+        source = examplesProject.sourceSets.main.java
+        destinationDirectory.set(examplesProject.layout.buildDirectory.dir('classes-ftc-sdk/java/main'))
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+        options.encoding = 'UTF-8'
+        options.compilerArgs += ['-Xlint:unchecked', '-Xlint:deprecation']
+        classpath = files(
+                project(':shift-core').sourceSets.main.output,
+                project(':shift-ftc').sourceSets.main.output,
+                robotCoreClassesJar,
+                androidCompileJarFile
+        )
+        doFirst {
+            logger.lifecycle("Compiling ${examplesProject.path} against FTC SDK ${ftcSdkVersion}")
+        }
+    }
+}
+
+tasks.register('compileAgainstFtcSdk') {
+    group = 'verification'
+    description = "Compile shift-ftc and examples against official FTC SDK ${ftcSdkVersion}."
+    dependsOn ':shift-ftc:compileAgainstFtcSdk', ':shift-examples:compileAgainstFtcSdk'
+    onlyIf { !skipSdkCompile() }
+    doLast {
+        if (skipSdkCompile()) {
+            logger.lifecycle('Skipped FTC SDK compile (shift.skipFtcSdkCompile=true).')
+        }
+    }
+}

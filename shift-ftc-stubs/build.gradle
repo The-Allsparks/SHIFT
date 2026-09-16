@@ -1,0 +1,20 @@
+plugins {
+    id 'java-library'
+}
+
+// Compile-only stand-ins for FTC SDK Gamepad types used by shift-ftc and
+// shift-examples. NOT published. Robot projects must compile against the
+// official FTC SDK (org.firstinspires.ftc:RobotCore) instead.
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
+tasks.named('jar', Jar) {
+    manifest {
+        attributes(
+                'Implementation-Title': 'SHIFT FTC compile stubs (CI only)',
+                'Implementation-Version': archiveVersion
+        )
+    }
+}

@@ -1,0 +1,40 @@
+name: CodeQL
+
+# Static analysis. Required merge check is the job name `Analyze Java`
+# (see docs/release.md). Does not replace architecture tests.
+#
+# Third-party actions are pinned to full commit SHAs.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: "17 7 * * 1"
+
+jobs:
+  analyze:
+    name: Analyze Java
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5.7.0
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: gradle
+      - name: Grant Gradle permissions
+        run: chmod +x gradlew
+      - uses: github/codeql-action/init@ff2f1c621b7f889edc0d3c761ac2e6a3f8cdb0dd # v4.37.7
+        with:
+          languages: java
+          build-mode: manual
+      - name: Build JVM modules for CodeQL
+        run: ./gradlew :shift-core:classes :shift-ftc:classes :shift-examples:classes --no-daemon
+      - uses: github/codeql-action/analyze@ff2f1c621b7f889edc0d3c761ac2e6a3f8cdb0dd # v4.37.7
+        with:
+          category: "/language:java"

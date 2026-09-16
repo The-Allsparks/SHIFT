@@ -1,0 +1,13 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
+
+rootProject.name = 'shift'
+
+include 'shift-core'
+include 'shift-ftc-stubs'
+include 'shift-ftc'
+include 'shift-examples'

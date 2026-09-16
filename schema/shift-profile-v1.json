@@ -1,0 +1,346 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://allsparks.org/schema/shift-profile-v1.json",
+  "title": "SHIFT profile",
+  "description": "Versioned operator configuration for the Semantic Human Input Framework for Teleoperation (schemaVersion 1).",
+  "type": "object",
+  "required": ["schemaVersion", "controllers"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Optional pointer to this JSON Schema for editor validation."
+    },
+    "schemaVersion": {
+      "type": "integer",
+      "const": 1,
+      "description": "SHIFT configuration schema version. Must be 1."
+    },
+    "id": {
+      "type": "string",
+      "description": "Stable profile identifier such as competition or garrett/offense."
+    },
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "person": {
+      "type": "string",
+      "description": "Optional operator folder such as garrett. Combined with set into id person/set."
+    },
+    "set": {
+      "type": "string",
+      "description": "Optional named variant inside a person folder: general, offense, defense, red, blue."
+    },
+    "controllers": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "$ref": "#/definitions/controllerAssignment"
+      },
+      "description": "Maps semantic roles (driver, codriver, or application-defined names) to physical slots and default layers."
+    },
+    "layers": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/layer"
+      },
+      "description": "Named operator layers. The same physical controls may emit different intents on different layers."
+    },
+    "bindings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/binding"
+      },
+      "description": "Top-level bindings. An empty layer field matches every active layer for that role, which is useful for layer switching."
+    },
+    "feedback": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/feedbackMapping"
+      },
+      "description": "Maps semantic feedback ids onto rumble and LED effects."
+    },
+    "settings": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Optional application-defined string settings. SHIFT does not interpret these."
+    }
+  },
+  "definitions": {
+    "controllerAssignment": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "slot": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Physical Driver Station slot (1 or 2 for FTC). Informational; SHIFT binds devices by role name."
+        },
+        "defaultLayer": {
+          "type": "string",
+          "description": "Layer active when the profile is loaded."
+        },
+        "model": {
+          "type": "string",
+          "description": "Optional hardware model. Does not remap buttons at runtime; the Driver Station already mapped HID onto Gamepad fields. Use iwgame-wired-ps5 for the IWGAME DualSense-style wired pad. Rear paddles on that pad must be firmware-remapped onto existing buttons.",
+          "enum": [
+            "unknown",
+            "logitech-f310",
+            "xbox-360",
+            "sony-ps4",
+            "etpark-ps4",
+            "sony-dualsense",
+            "sony-ps5",
+            "iwgame-wired-ps5"
+          ]
+        }
+      }
+    },
+    "layer": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "controller": {
+          "type": "string",
+          "description": "Role that owns this layer, e.g. driver or codriver."
+        },
+        "bindings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/binding"
+          }
+        }
+      }
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Optional stable binding id used in observability events."
+        },
+        "role": {
+          "type": "string"
+        },
+        "controller": {
+          "type": "string"
+        },
+        "layer": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string",
+          "description": "Physical control or alias such as Y, NORTH, CIRCLE, LEFT_STICK_Y."
+        },
+        "when": {
+          "$ref": "#/definitions/trigger"
+        },
+        "event": {
+          "type": "string",
+          "enum": ["ON_PRESS", "ON_RELEASE", "WHILE_HELD", "ANALOG"],
+          "description": "ON_PRESS/ON_RELEASE are discrete edges. WHILE_HELD is a continuous boolean. ANALOG is a continuous axis."
+        },
+        "intent": {
+          "type": "string",
+          "description": "Registered semantic intent id such as elevator.score.high."
+        },
+        "transform": {
+          "$ref": "#/definitions/transform"
+        },
+        "x": {
+          "$ref": "#/definitions/axis"
+        },
+        "y": {
+          "$ref": "#/definitions/axis"
+        },
+        "priority": {
+          "type": "string",
+          "description": "Semantic priority metadata for downstream arbitration (SAFETY, MANUAL_OVERRIDE, AUTOMATION, ASSIST, DEFAULT, or application-defined)."
+        },
+        "allowOverlap": {
+          "type": "boolean",
+          "description": "When true, this binding is not suppressed by a more specific chord and does not participate in equal-trigger conflict rejection."
+        },
+        "setLayer": {
+          "type": "string",
+          "description": "Switch this controller to the named layer. Takes effect at the end of the update cycle."
+        },
+        "cycleLayers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        }
+      }
+    },
+    "axis": {
+      "type": "object",
+      "required": ["source"],
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "type": "string"
+        },
+        "transform": {
+          "$ref": "#/definitions/transform"
+        }
+      }
+    },
+    "transform": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "deadband": {
+          "type": "number",
+          "minimum": 0,
+          "exclusiveMaximum": 1
+        },
+        "invert": {
+          "type": "boolean"
+        },
+        "scale": {
+          "type": "number"
+        },
+        "exponent": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "min": {
+          "type": "number"
+        },
+        "max": {
+          "type": "number"
+        },
+        "threshold": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "trigger": {
+      "description": "Structured trigger. Do not embed scripts. Strings are control names or aliases.",
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "all": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/trigger"
+              },
+              "minItems": 1
+            },
+            "any": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/trigger"
+              },
+              "minItems": 1
+            },
+            "not": {
+              "$ref": "#/definitions/trigger"
+            },
+            "gt": {
+              "$ref": "#/definitions/analogComparison"
+            },
+            "gte": {
+              "$ref": "#/definitions/analogComparison"
+            },
+            "lt": {
+              "$ref": "#/definitions/analogComparison"
+            },
+            "lte": {
+              "$ref": "#/definitions/analogComparison"
+            },
+            "source": {
+              "type": "string"
+            },
+            "threshold": {
+              "type": "number"
+            }
+          }
+        }
+      ]
+    },
+    "analogComparison": {
+      "type": "object",
+      "required": ["source", "value"],
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "type": "string"
+        },
+        "value": {
+          "type": "number"
+        }
+      }
+    },
+    "feedbackMapping": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "role": {
+          "type": "string"
+        },
+        "controller": {
+          "type": "string"
+        },
+        "rumble": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": ["short", "long", "double", "pulse", "stop"]
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "pattern": {
+                  "type": "string",
+                  "enum": ["short", "long", "double", "pulse", "stop"]
+                },
+                "large": {
+                  "type": "number"
+                },
+                "small": {
+                  "type": "number"
+                },
+                "rumble1": {
+                  "type": "number"
+                },
+                "rumble2": {
+                  "type": "number"
+                },
+                "durationMs": {
+                  "type": "integer"
+                }
+              }
+            }
+          ]
+        },
+        "led": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "r": { "type": "number", "minimum": 0, "maximum": 1 },
+            "g": { "type": "number", "minimum": 0, "maximum": 1 },
+            "b": { "type": "number", "minimum": 0, "maximum": 1 },
+            "red": { "type": "number" },
+            "green": { "type": "number" },
+            "blue": { "type": "number" },
+            "durationMs": { "type": "integer" }
+          }
+        }
+      }
+    }
+  }
+}

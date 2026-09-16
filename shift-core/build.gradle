@@ -1,0 +1,52 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
+
+dependencies {
+    api "org.json:json:${jsonVersion}"
+
+    testImplementation platform("org.junit:junit-bom:${junitBomVersion}")
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+tasks.named('test', Test) {
+    useJUnitPlatform()
+    testLogging {
+        events 'passed', 'skipped', 'failed'
+    }
+}
+
+tasks.withType(JavaCompile).configureEach { compile ->
+    compile.options.compilerArgs += ['-Werror']
+}
+
+tasks.named('jar', Jar) {
+    manifest {
+        attributes(
+                'Implementation-Title': 'SHIFT Core',
+                'Implementation-Version': archiveVersion,
+                'Automatic-Module-Name': 'org.allsparks.shift'
+        )
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifactId = 'shift-core'
+            pom {
+                name = 'SHIFT Core'
+                description = 'Semantic Human Input Framework for Teleoperation. Hardware-independent operator-intent runtime.'
+                url = 'https://github.com/The-Allsparks/SHIFT'
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://opensource.org/licenses/MIT'
+                    }
+                }
+            }
+        }
+    }
+}

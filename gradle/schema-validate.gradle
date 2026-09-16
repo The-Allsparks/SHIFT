@@ -1,0 +1,33 @@
+// Validate example profiles against the runtime loader AND confirm the
+// JSON Schema file is well-formed. Schema-vs-example checks run as part of
+// shift-core unit tests (ProfileSchemaConformanceTest). This task is a
+// lightweight extra guard used by CI docs-structure and `check`.
+
+tasks.register('validateExampleProfiles') {
+    group = 'verification'
+    description = 'Confirm example JSON profiles and the v1 JSON Schema exist.'
+    doLast {
+        def schema = file('schema/shift-profile-v1.json')
+        if (!schema.isFile()) {
+            throw new GradleException("Missing JSON Schema at ${schema}")
+        }
+        def examples = [
+                file('examples/profiles/competition-example.json'),
+                file('examples/profiles/fallback.json'),
+                file('shift-core/src/main/resources/org/allsparks/shift/profile/fallback.json')
+        ]
+        examples.each { f ->
+            if (!f.isFile()) {
+                throw new GradleException("Missing example profile at ${f}")
+            }
+            def text = f.getText('UTF-8')
+            if (!text.contains('"schemaVersion"')) {
+                throw new GradleException("${f} is missing schemaVersion")
+            }
+        }
+    }
+}
+
+tasks.named('check') {
+    dependsOn 'validateExampleProfiles'
+}

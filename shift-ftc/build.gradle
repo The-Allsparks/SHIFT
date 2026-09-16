@@ -1,0 +1,50 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
+
+dependencies {
+    api project(':shift-core')
+    compileOnly project(':shift-ftc-stubs')
+
+    testImplementation project(':shift-ftc-stubs')
+    testImplementation platform("org.junit:junit-bom:${junitBomVersion}")
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+tasks.named('test', Test) {
+    useJUnitPlatform()
+    testLogging {
+        events 'passed', 'skipped', 'failed'
+    }
+}
+
+tasks.named('jar', Jar) {
+    manifest {
+        attributes(
+                'Implementation-Title': 'SHIFT FTC',
+                'Implementation-Version': archiveVersion,
+                'Automatic-Module-Name': 'org.allsparks.shift.ftc'
+        )
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifactId = 'shift-ftc'
+            pom {
+                name = 'SHIFT FTC'
+                description = 'FTC SDK adapters for SHIFT. Compile against the official FTC SDK on the robot.'
+                url = 'https://github.com/The-Allsparks/SHIFT'
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://opensource.org/licenses/MIT'
+                    }
+                }
+            }
+        }
+    }
+}

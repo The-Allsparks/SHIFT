@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "shift-safe-idle",
+  "name": "SHIFT safe idle fallback",
+  "description": "Known-safe embedded profile. Emits no operator intents. Used only when the preferred profile fails validation.",
+  "controllers": {
+    "driver": {
+      "slot": 1,
+      "defaultLayer": "idle"
+    },
+    "codriver": {
+      "slot": 2,
+      "defaultLayer": "idle"
+    }
+  },
+  "layers": {
+    "idle": {
+      "bindings": []
+    }
+  }
+}

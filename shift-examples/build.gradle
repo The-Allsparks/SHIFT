@@ -1,0 +1,17 @@
+plugins {
+    id 'java-library'
+}
+
+dependencies {
+    implementation project(':shift-ftc')
+    compileOnly project(':shift-ftc-stubs')
+}
+
+tasks.named('jar', Jar) {
+    manifest {
+        attributes(
+                'Implementation-Title': 'SHIFT Examples',
+                'Implementation-Version': archiveVersion
+        )
+    }
+}

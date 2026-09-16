@@ -1,0 +1,76 @@
+plugins {
+    id 'com.diffplug.spotless' version '6.25.0' apply false
+}
+
+ext {
+    shiftGroup = 'org.allsparks'
+    shiftVersion = '0.1.0'
+    junitBomVersion = '5.10.2'
+    jsonVersion = '20240303'
+    // FTC SDK 11.2.1 (DECODE 2025-2026 / 2026 offseason). Source/target 1.8
+    // matches FtcRobotController v11.2 compileOptions. 11.2.1 is the current
+    // Maven Central patch (Gradle/AGP); Gamepad fields are the 11.2 surface.
+    // OnBotJava still requires Java 8.
+    ftcSdkVersion = '11.2.1'
+}
+
+subprojects { sub ->
+    sub.group = rootProject.ext.shiftGroup
+    sub.version = rootProject.ext.shiftVersion
+
+    sub.pluginManager.withPlugin('java-library') {
+        sub.java {
+            sourceCompatibility = JavaVersion.VERSION_1_8
+            targetCompatibility = JavaVersion.VERSION_1_8
+            withSourcesJar()
+            withJavadocJar()
+        }
+        sub.repositories {
+            mavenCentral()
+        }
+        sub.dependencies {
+            testRuntimeOnly platform("org.junit:junit-bom:${rootProject.ext.junitBomVersion}")
+            testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+        }
+        sub.tasks.named('javadoc', Javadoc) { javadoc ->
+            javadoc.options.encoding = 'UTF-8'
+            javadoc.options.addStringOption('Xdoclint:none', '-quiet')
+            javadoc.failOnError = false
+        }
+        sub.tasks.withType(JavaCompile).configureEach { compile ->
+            compile.options.encoding = 'UTF-8'
+            compile.options.compilerArgs += ['-Xlint:unchecked', '-Xlint:deprecation']
+        }
+        if (sub.name != 'shift-ftc-stubs') {
+            sub.apply plugin: 'com.diffplug.spotless'
+            sub.spotless {
+                java {
+                    palantirJavaFormat()
+                    target 'src/**/*.java'
+                }
+            }
+        }
+    }
+}
+
+tasks.register('test') {
+    dependsOn ':shift-core:test', ':shift-ftc:test'
+}
+
+tasks.register('check') {
+    dependsOn ':shift-core:check', ':shift-ftc:check', ':shift-examples:compileJava'
+}
+
+tasks.register('javadocAll') {
+    dependsOn ':shift-core:javadoc', ':shift-ftc:javadoc'
+}
+
+tasks.register('assembleReleaseArtifacts') {
+    group = 'build'
+    description = 'Assemble robot-facing jars: shift-core and shift-ftc only.'
+    dependsOn ':shift-core:assemble', ':shift-ftc:assemble'
+}
+
+apply from: 'gradle/ftc-sdk-compile.gradle'
+apply from: 'gradle/robot-artifacts.gradle'
+apply from: 'gradle/schema-validate.gradle'
