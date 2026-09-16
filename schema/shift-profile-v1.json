@@ -18,7 +18,7 @@
     },
     "id": {
       "type": "string",
-      "description": "Stable profile identifier such as competition or garrett/offense."
+      "description": "Stable profile identifier such as competition or studenta/offense."
     },
     "name": {
       "type": "string"
@@ -28,7 +28,7 @@
     },
     "person": {
       "type": "string",
-      "description": "Optional operator folder such as garrett. Combined with set into id person/set."
+      "description": "Optional operator folder such as studenta. Combined with set into id person/set."
     },
     "set": {
       "type": "string",

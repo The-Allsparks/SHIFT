@@ -9,10 +9,10 @@ JSON Schema (editor validation and autocomplete): [`schema/shift-profile-v1.json
 | Field | Required | Description |
 | ----- | -------- | ----------- |
 | `schemaVersion` | yes | Integer `1` |
-| `id` | no | Stable name such as `competition` or `garrett/offense` |
+| `id` | no | Stable name such as `competition` or `studenta/offense` |
 | `name` | no | Display name |
 | `description` | no | Human notes |
-| `person` | no | Operator folder such as `garrett`. Combined with `set` into canonical id `person/set` |
+| `person` | no | Operator folder such as `studenta`. Combined with `set` into canonical id `person/set` |
 | `set` | no | Named variant inside a person folder: `general`, `offense`, `defense`, `red`, `blue`, or any other token |
 | `controllers` | yes | Role → slot / default layer / optional hardware `model` |
 | `layers` | no | Named layers with bindings |
@@ -44,11 +44,11 @@ IWGAME rear paddles are firmware-programmable. RobotCore 12.0 has no paddle fiel
 `ProfileBank` parses JSON once at construction. There is no coded cap on how many profiles a bank may hold.
 
 ```java
-Profile session = bank.compose("garrett/offense", "sam/general");
+Profile session = bank.compose("studenta/offense", "studentb/general");
 shift.activate(session); // compiled Profile only; no JSON on the loop
 ```
 
-`compose` takes driver bindings from the first profile and operator (codriver) bindings from the second. Person-role files for gamepad 1 must declare `controllers.driver`; operator files must declare `controllers.codriver`. Examples live in `examples/profiles/garrett-*.json` and `examples/profiles/sam-general.json`.
+`compose` takes driver bindings from the first profile and operator (codriver) bindings from the second. Person-role files for gamepad 1 must declare `controllers.driver`; operator files must declare `controllers.codriver`. Examples live in `examples/profiles/studenta-*.json` and `examples/profiles/studentb-general.json`.
 
 Call `activate` from `init_loop` or between matches, not from `update()`.
 

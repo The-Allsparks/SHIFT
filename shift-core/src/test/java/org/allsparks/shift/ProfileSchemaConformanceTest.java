@@ -43,14 +43,14 @@ class ProfileSchemaConformanceTest {
         assertEquals("shift-safe-idle", fallback.id());
 
         ProfileBank bank = ProfileBank.builder(ShiftFixtures.exampleIntents())
-                .addJson(read(findRepoRoot().resolve("examples/profiles/garrett-general.json")))
-                .addJson(read(findRepoRoot().resolve("examples/profiles/garrett-offense.json")))
-                .addJson(read(findRepoRoot().resolve("examples/profiles/sam-general.json")))
+                .addJson(read(findRepoRoot().resolve("examples/profiles/studenta-general.json")))
+                .addJson(read(findRepoRoot().resolve("examples/profiles/studenta-offense.json")))
+                .addJson(read(findRepoRoot().resolve("examples/profiles/studentb-general.json")))
                 .build();
-        assertEquals("garrett", bank.require("garrett/general").person());
-        assertEquals("offense", bank.require("garrett/offense").set());
-        Profile session = bank.compose("garrett/offense", "sam/general");
-        assertEquals("garrett/offense+sam/general", session.id());
+        assertEquals("studenta", bank.require("studenta/general").person());
+        assertEquals("offense", bank.require("studenta/offense").set());
+        Profile session = bank.compose("studenta/offense", "studentb/general");
+        assertEquals("studenta/offense+studentb/general", session.id());
         assertTrue(session.controllers().containsKey(ControllerRole.DRIVER));
         assertTrue(session.controllers().containsKey(ControllerRole.CODRIVER));
     }
