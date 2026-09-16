@@ -8,7 +8,8 @@ Maven Central publication is deferred. Until then, teams consume sibling source 
 
 | Label | Meaning |
 |-------|---------|
-| `0.1.0` | First software V1: snapshots, FTC adapters, JSON profiles, layers, intents, feedback |
+| `0.1.0` | First software V1: snapshots, FTC adapters, JSON profiles, layers, intents, feedback (CHANGELOG date 2026-09-04; never tagged on GitHub) |
+| `0.1.1` | First GitHub tag. FTC SDK 12.0.0 compile pin plus shipped 0.1.x work after 0.1.0 |
 | `0.1.x` | Compatible fixes on schemaVersion 1 |
 | `1.x` | Compatibility commitments after teams have used the library in season |
 
@@ -57,9 +58,13 @@ Leave unmatched Dependabot PRs open and unmerged. That is the safe default. Re-r
 
 ## Tagging
 
+First published tag is `v0.1.1` (2026-09-16). Do not create `v0.1.0`. Do not force-move or delete tags. If a tag is wrong, publish a newer tag.
+
+Checklist for `v0.1.1`: `check`, `compileAgainstFtcSdk`, example OpMode compile, architecture tests, README/changelog match, no motor writes. Maven Central and GitHub Packages stay deferred (no secrets).
+
 ```bash
-git tag v0.1.0
-git push origin v0.1.0
+git tag -a v0.1.1 -m "SHIFT 0.1.1: FTC SDK 12.0.0 compile pin."
+git push origin v0.1.1
 ```
 
 Publishing to GitHub Packages or Maven Central is a maintainer step after secrets exist.
