@@ -71,6 +71,7 @@ jobs:
           test -f docs/deferred.md
           test -f docs/research/upstream.md
           test -f docs/audits/initial-deep-audit.md
+          test -f docs/audits/priority-ledger.md
           test -f docs/release.md
           test -f schema/shift-profile-v1.json
           test -f examples/profiles/competition-example.json
@@ -79,3 +80,4 @@ jobs:
           test -f examples/profiles/garrett-offense.json
           test -f examples/profiles/sam-general.json
           test -f .github/workflows/codeql.yml
+          test -f .github/ISSUE_TEMPLATE/phase_work.md
