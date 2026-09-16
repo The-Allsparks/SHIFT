@@ -72,6 +72,7 @@ jobs:
           test -f docs/research/upstream.md
           test -f docs/audits/initial-deep-audit.md
           test -f docs/audits/priority-ledger.md
+          test -f docs/audits/hub-evidence-2026-09-08.md
           test -f docs/release.md
           test -f docs/INSTALL.md
           test -f docs/TEACHING.md

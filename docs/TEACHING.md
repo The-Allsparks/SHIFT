@@ -51,6 +51,8 @@ Use **BumbleBee Motor Test** in TeamCode (`bringup`). That OpMode uses conventio
 
 Motor Test is how you prove a wheel turns when SHIFT is out of the path.
 
+Dated Hub logs (Drive with SHIFT on, Motor Test with SHIFT omitted, loop time from the FORGE dashboard): [hub-evidence-2026-09-08.md](audits/hub-evidence-2026-09-08.md). Point at that card, not at GitHub Actions. It is not an FTC-ready claim. RC logcat does not print `shiftFallback`.
+
 ## If JSON is bad
 
 `FtcShift.builder()` enables the embedded idle fallback. After `build()`, check `usedFallback()`.
