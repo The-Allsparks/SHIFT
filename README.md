@@ -79,7 +79,7 @@ Details: [docs/architecture.md](docs/architecture.md).
 
 ## Installation
 
-SHIFT is Java 8 source/target to match FTC SDK 11.2 / OnBotJava.
+SHIFT is Java 8 source/target to match FTC SDK 12.0 / OnBotJava.
 
 Robot-facing artifacts:
 

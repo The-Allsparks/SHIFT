@@ -1,7 +1,7 @@
 name: CI
 
 # test          — compile, unit tests, architecture tests, examples, artifacts, spotless, schema files
-# sdk-compile   — shift-ftc / examples against RobotCore 11.2.1
+# sdk-compile   — shift-ftc / examples against RobotCore 12.0.0
 # docs-structure — required documentation present
 #
 # Architecture tests run inside `./gradlew check`.
@@ -47,7 +47,7 @@ jobs:
           cache: gradle
       - name: Grant Gradle permissions
         run: chmod +x gradlew
-      - name: Compile adapters against FTC SDK 11.2.1
+      - name: Compile adapters against FTC SDK 12.0.0
         run: ./gradlew compileAgainstFtcSdk --no-daemon
 
   docs-structure:

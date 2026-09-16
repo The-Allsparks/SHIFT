@@ -4,11 +4,11 @@ SHIFT is an input/intent framework. It is not a copy of WPILib command-based pro
 
 Sources reviewed while designing V1 (2026-09):
 
-* FTC SDK `Gamepad` (RobotCore 11.2.1 Javadoc and OpenRC-Turbo `Gamepad.java`, which tracks the public SDK fields)
+* FTC SDK `Gamepad` (RobotCore 12.0.0 Javadoc and OpenRC-Turbo `Gamepad.java`, which tracks the public SDK fields)
 * [Game Manual 0 — Gamepad Usage](https://gm0.org/en/latest/docs/software/tutorials/gamepad.html)
 * [FTCLib GamepadEx / ButtonReader](https://docs.ftclib.org/ftclib/features/gamepad-extensions)
 * [WPILib 2025 binding commands to triggers](https://docs.wpilib.org/en/2025/docs/software/commandbased/binding-commands-to-triggers.html)
-* FtcRobotController v11.2 `build.common.gradle` (Java 8, minSdk 24)
+* FtcRobotController v12.0 `build.common.gradle` (Java 8, minSdk 24)
 
 ## FTC SDK — adopted
 
@@ -22,7 +22,7 @@ Sources reviewed while designing V1 (2026-09):
 | LED (`setLedColor`, `LedEffect`) | LED command abstraction; simple color in V1, `LedEffect` sequences deferred |
 | Touchpad | `TOUCHPAD` plus finger contacts and XY (`TOUCHPAD_FINGER_1`, `TOUCHPAD_FINGER_1_X`, …) |
 | Digital trigger click | `LEFT_TRIGGER_PRESSED` / `RIGHT_TRIGGER_PRESSED` from `left_trigger_pressed` / `right_trigger_pressed`, distinct from analog trigger axes |
-| DualSense / DualSense-style clones | Same PlayStation field map as PS4. Official DualSense is a Driver Station 11.2 device; `Gamepad.Type` stays PS4. IWGAME wired PS-5/PC is catalogued as `iwgame-wired-ps5`. Rear paddles are firmware-remapped, not SDK fields. Gyro is not in `Gamepad`. |
+| DualSense / DualSense-style clones | Same PlayStation field map as PS4. Official DualSense is a Driver Station 11.2+ device; RobotCore 12.0 `Gamepad.Type` stays PS4. IWGAME wired PS-5/PC is catalogued as `iwgame-wired-ps5`. Rear paddles are firmware-remapped, not SDK fields. Gyro is not in `Gamepad`. |
 | `atRest()` | Not wrapped; applications can inspect analog zeros |
 | TestGamepad | Driver Station diagnostic utility, not an OpMode API. SHIFT tests use `SimulatedInputDevice` |
 
@@ -54,4 +54,4 @@ SHIFT must not become “WPILib Commands for FTC.” HELM already exists as the 
 
 ## Java / Android constraint
 
-FtcRobotController v11.2 still compiles TeamCode as Java 8 because OnBotJava cannot consume newer class files. SHIFT matches that, even though CI runs JDK 17.
+FtcRobotController v12.0 still compiles TeamCode as Java 8 because OnBotJava cannot consume newer class files. SHIFT matches that, even though CI runs JDK 17.

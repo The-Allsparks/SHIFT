@@ -37,7 +37,7 @@ PlayStation / DualSense-style aliases (`CIRCLE`, `CREATE`, `EAST`, `SOUTH`, `TOU
 
 Digital trigger clicks (`LEFT_TRIGGER_PRESSED` / `RIGHT_TRIGGER_PRESSED`, aliases `LTPRESSED`, `LTCLICK`, …) are SDK boolean fields, distinct from analog `LEFT_TRIGGER` / `RIGHT_TRIGGER`. Use analog `gt`/`gte` when you want a travel threshold; use the pressed control when you want the pad's click.
 
-IWGAME rear paddles are firmware-programmable. RobotCore 11.2 has no paddle fields, so program those two back buttons onto existing controls (bumpers, face buttons) and bind those names in the profile.
+IWGAME rear paddles are firmware-programmable. RobotCore 12.0 has no paddle fields, so program those two back buttons onto existing controls (bumpers, face buttons) and bind those names in the profile.
 
 ## Profile banks
 

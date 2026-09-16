@@ -12,7 +12,7 @@ These are intentionally not in SHIFT V1. The runtime is designed so they can be 
 | Debounce windows (WPILib-style) | Extra state; not required for FTC digital buttons | Trigger wrapper can decorate later |
 | JSON Schema validator on the robot | Too heavy; Android/FTC already parse via org.json | Schema file is for IDEs and CI |
 | Maven Central publication | Org process | `maven-publish` is wired |
-| Multi-SDK Gamepad adapters | 11.2 is the current ecosystem | Adapter module is separate from core |
+| Multi-SDK Gamepad adapters | 12.0 is the current ecosystem | Adapter module is separate from core |
 | Built-in TRACE implementation | Would couple SHIFT to TRACE | `ShiftEventSink` + `ShiftInputListener` |
 | Audio announcements | ECHO's job | Feedback / `LAYER_CHANGED` events |
 | Command scheduler / subsystem requirements | Out of scope | Optional `LogicalResource` metadata only |

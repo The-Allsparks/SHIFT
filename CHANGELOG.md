@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Compile-check against FTC SDK **11.2.1** (Gamepad fields unchanged from 11.2).
+- Compile-check against FTC SDK **12.0.0** (BIOBUZZ). Gamepad fields SHIFT samples are unchanged from 11.2.
 - Sample digital trigger clicks as `LEFT_TRIGGER_PRESSED` / `RIGHT_TRIGGER_PRESSED`, distinct from analog `LEFT_TRIGGER` / `RIGHT_TRIGGER`.
 - `CompositeEventSink`, `ShiftInputListener`, and `CompositeInputListener` so TRACE, ECHO, and telemetry can listen without a SHIFT compile dependency.
 - `ProfileBank` with `person`/`set` ids (`garrett/offense`) and driver+operator compose; `Shift.activate(Profile)` swaps compiled maps without parsing JSON on the loop.
