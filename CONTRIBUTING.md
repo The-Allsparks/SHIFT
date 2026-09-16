@@ -54,6 +54,16 @@ Details: [docs/release.md](docs/release.md).
 
 Workflows pin third-party actions to full commit SHAs with a version comment. Do not switch back to floating major tags.
 
+## Dependabot
+
+Do not merge a Dependabot PR just because it opened. SHIFT must keep Java 8 tests, Palantir Spotless 6.25.x, and `compileAgainstFtcSdk` against RobotCore 12.0.0 green.
+
+- JUnit BOM stays on 5.10.2. Do not merge JUnit 6.x until a compatibility note exists and Java 8 SHIFT tests prove green. Dependabot PR #5 (5.10.2 to 6.1.3) failed CI.
+- Do not upgrade TeamCode's FTC Gradle wrapper because SHIFT's wrapper moved. Robot projects `includeBuild` SHIFT into the FTC SDK wrapper; keep SHIFT Gradle scripts compatible with that wrapper.
+- GitHub Actions stay SHA-pinned with version comments (see above).
+
+Details: [docs/release.md](docs/release.md).
+
 ## License
 
 Contributions are accepted under the MIT License ([LICENSE](LICENSE)). No CLA is required.
