@@ -34,6 +34,27 @@ Do not silently reinterpret schemaVersion 1 files. Breaking binding JSON require
 
 Do not add required checks that do not exist (no hardware CI). SHIFT does not command motors; desktop tests plus `compileAgainstFtcSdk` are the V1 bar.
 
+## Dependabot policy
+
+Dependabot may open PRs. Merging is a maintainer decision after `./gradlew check` and `./gradlew compileAgainstFtcSdk` stay green on Java 8. Do not merge a bump because it is monthly or because Dependabot opened it.
+
+These gates must stay green:
+
+| Gate | Current bar |
+|------|-------------|
+| Unit tests | Java 8 (`./gradlew check`) |
+| Format | Palantir Spotless 6.25.x (`spotlessCheck`) |
+| SDK compile | `compileAgainstFtcSdk` vs official RobotCore 12.0.0 |
+
+Do not merge until a written compatibility note exists and the gates above are green:
+
+- JUnit BOM 6.x. Current pin is JUnit 5.10.2. Dependabot [PR #5](https://github.com/The-Allsparks/SHIFT/pull/5) (5.10.2 to 6.1.3) failed CI.
+- Spotless 8.x while Palantir Spotless 6.25.x is the format bar.
+- TeamCode FTC Gradle wrapper upgrades just because SHIFT's wrapper moved. Robot projects `includeBuild` SHIFT into the FTC SDK wrapper. Keep SHIFT Gradle scripts compatible with the robot project's wrapper.
+- Floating GitHub Actions major tags. Keep SHA pins with version comments ([CONTRIBUTING.md](../CONTRIBUTING.md)).
+
+Leave unmatched Dependabot PRs open and unmerged. That is the safe default. Re-run `./gradlew check` before any bump merge.
+
 ## Tagging
 
 ```bash
