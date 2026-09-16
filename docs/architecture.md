@@ -74,6 +74,8 @@ Continuous analog/vector bindings are independent of digital specificity unless 
 
 ## Observability
 
+TeamCode adapter contract, TRACE prefixes, and the BumbleBee `TraceShiftAdapter` example: [integrations.md](integrations.md).
+
 `ShiftEventSink` receives structured events. `CompositeEventSink` fans out to TRACE, ECHO, and telemetry adapters in registration order on the robot loop thread. Implementations must not block.
 
 `ShiftInputListener` receives every sampled snapshot (including analog sticks) once per assigned controller per `update()`. Digital `INPUT` events remain TRACE-level edges only. TeamCode implements both interfaces; SHIFT does not depend on TRACE or ECHO.
