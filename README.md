@@ -221,7 +221,7 @@ Run:
 .\gradlew.bat compileAgainstFtcSdk
 ```
 
-`check` includes architecture tests (`PackageBoundaryTest`, `HotPathGuardTest`, `FtcArchitectureTest`). CI also runs CodeQL job `Analyze Java`.
+`check` includes architecture tests (`PackageBoundaryTest`, `HotPathGuardTest`, `FtcArchitectureTest`). CI also runs CodeQL job `Analyze Java`. Desktop CI is not Control Hub evidence. The dated Hub card is [docs/audits/hub-evidence-2026-09-08.md](docs/audits/hub-evidence-2026-09-08.md). That card is not an FTC-ready claim.
 
 ---
 
@@ -231,6 +231,7 @@ Run:
 | -------- | -------- |
 | [Install](docs/INSTALL.md) | Clone sibling of FTC SDK 12.0, includeBuild, jars; do not ship stubs |
 | [Teaching](docs/TEACHING.md) | Stick to named intent to team mix; Motor Test omit; usedFallback |
+| [Hub evidence](docs/audits/hub-evidence-2026-09-08.md) | Dated Hub logs for Drive vs Motor Test; loop time from FORGE dashboard; not FTC-ready |
 | [Architecture](docs/architecture.md) | Pipeline, module boundaries, loop lifecycle |
 | [Integrations](docs/integrations.md) | ShiftEventSink vs ShiftInputListener; TeamCode TRACE/ECHO adapters |
 | [Configuration](docs/configuration.md) | JSON fields, specificity rules, validation |
