@@ -73,7 +73,7 @@ Feedback travels the other way: the application emits a semantic event such as `
 
 Observability is an interface. TRACE can implement `ShiftEventSink` (semantic events) and `ShiftInputListener` (per-loop snapshots). `CompositeEventSink` / `CompositeInputListener` fan out to TRACE, ECHO, and telemetry. SHIFT does not depend on those libraries.
 
-Details: [docs/architecture.md](docs/architecture.md).
+Details: [docs/architecture.md](docs/architecture.md). Adapter contract: [docs/integrations.md](docs/integrations.md).
 
 ---
 
@@ -232,6 +232,7 @@ Run:
 | [Install](docs/INSTALL.md) | Clone sibling of FTC SDK 12.0, includeBuild, jars; do not ship stubs |
 | [Teaching](docs/TEACHING.md) | Stick to named intent to team mix; Motor Test omit; usedFallback |
 | [Architecture](docs/architecture.md) | Pipeline, module boundaries, loop lifecycle |
+| [Integrations](docs/integrations.md) | ShiftEventSink vs ShiftInputListener; TeamCode TRACE/ECHO adapters |
 | [Configuration](docs/configuration.md) | JSON fields, specificity rules, validation |
 | [Intent design](docs/intent-design.md) | How to name intents |
 | [Migration](docs/migration.md) | Traditional FTC gamepad code vs SHIFT |
