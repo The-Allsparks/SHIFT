@@ -17,7 +17,7 @@ Coding agents: read [AGENTS.md](AGENTS.md) before changing module boundaries or 
 |---------|------------------|
 | `.\gradlew.bat check` | Broken tests, architecture regressions, example compile failures, stubs on robot artifacts, format drift (`spotlessCheck`) |
 | `.\gradlew.bat spotlessApply` | Rewrite Java (except `shift-ftc-stubs`) to Palantir Java Format |
-| `.\gradlew.bat compileAgainstFtcSdk` | Adapters drifting from FTC SDK 11.2.1 |
+| `.\gradlew.bat compileAgainstFtcSdk` | Adapters drifting from FTC SDK 12.0.0 |
 
 ## Rules
 

@@ -17,7 +17,7 @@ Do not silently reinterpret schemaVersion 1 files. Breaking binding JSON require
 ## Checklist before tagging
 
 - [ ] `./gradlew check javadocAll assembleReleaseArtifacts`
-- [ ] `./gradlew compileAgainstFtcSdk` (official RobotCore 11.2.1, not stubs)
+- [ ] `./gradlew compileAgainstFtcSdk` (official RobotCore 12.0.0, not stubs)
 - [ ] Example OpMode compiles (`:shift-examples:compileJava`)
 - [ ] Architecture tests green (`PackageBoundaryTest`, `HotPathGuardTest`, `FtcArchitectureTest`)
 - [ ] README / changelog match implementation

@@ -4,7 +4,7 @@ package com.qualcomm.robotcore.hardware;
  * Compile-only stand-in for {@code com.qualcomm.robotcore.hardware.Gamepad}.
  *
  * <p>Robot projects must compile against official RobotCore. Field names and
- * methods match FTC SDK 11.2.1 Gamepad as used by SHIFT adapters.
+ * methods match FTC SDK 12.0.0 Gamepad as used by SHIFT adapters.
  */
 public class Gamepad {
     public static final int ID_UNASSOCIATED = -1;

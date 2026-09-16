@@ -4,15 +4,15 @@
 
 | Item | Support |
 | ---- | ------- |
-| Minimum FTC SDK | **11.2.0** (DECODE 2025–2026 / 2026 offseason) |
-| Verified compile | `org.firstinspires.ftc:RobotCore:11.2.1` via `./gradlew compileAgainstFtcSdk` |
-| Older SDKs | Not a project goal. Gamepad rumble/LED/touchpad have existed since SDK 6.x; SHIFT still targets current RobotCore APIs. |
+| Minimum FTC SDK | **12.0.0** (BIOBUZZ 2026–2027) |
+| Verified compile | `org.firstinspires.ftc:RobotCore:12.0.0` via `./gradlew compileAgainstFtcSdk` |
+| Older SDKs | Not a project goal. Gamepad rumble/LED/touchpad have existed since SDK 6.x; the fields SHIFT samples are unchanged from 11.2. SHIFT still targets current RobotCore APIs. |
 
 `FtcGamepadDevice` reads public `Gamepad` fields and `type()`, `getGamepadId()`, `timestamp`. Touchpad click, both finger contacts, finger XY, and digital trigger clicks (`left_trigger_pressed` / `right_trigger_pressed`) are sampled. `FtcFeedbackActuator` calls `rumble`, `rumbleBlips`, `stopRumble`, and `setLedColor`.
 
 ## Gamepads
 
-SHIFT does not talk USB. The FTC Driver Station maps HID onto `Gamepad` fields; SHIFT snapshots those fields. RobotCore 11.2 `Gamepad.Type` is still `UNKNOWN`, `LOGITECH_F310`, `XBOX_360`, `SONY_PS4`, and `SONY_PS4_SUPPORTED_BY_KERNEL`. Official DualSense support added in Driver Station 11.2 still reports a PS4 type, not a `SONY_PS5` enum.
+SHIFT does not talk USB. The FTC Driver Station maps HID onto `Gamepad` fields; SHIFT snapshots those fields. RobotCore 12.0 `Gamepad.Type` is still `UNKNOWN`, `LOGITECH_F310`, `XBOX_360`, `SONY_PS4`, and `SONY_PS4_SUPPORTED_BY_KERNEL`. Official DualSense support added in Driver Station 11.2 still reports a PS4 type, not a `SONY_PS5` enum.
 
 | Model token | Hardware | Notes |
 | ----------- | -------- | ----- |
@@ -24,13 +24,13 @@ SHIFT does not talk USB. The FTC Driver Station maps HID onto `Gamepad` fields; 
 
 Declare `"model": "iwgame-wired-ps5"` on a profile controller when that pad is in the slot. The token is documentation and validation; it does not change sampling.
 
-Competition legality is Game Manual 1, not SHIFT. Official DualSense is listed for SDK 11.2-era events. A third-party IWGAME clone may be practice-only.
+Competition legality is Game Manual 1, not SHIFT. Official DualSense is listed for current-season events. A third-party IWGAME clone may be practice-only.
 
 Always use a wired connection. Bluetooth is illegal in FTC.
 
 ## Java
 
-Source and bytecode are **Java 8**. That matches `FtcRobotController` v11.2 `compileOptions` (`VERSION_1_8`) and OnBotJava, which still does not support later language levels.
+Source and bytecode are **Java 8**. That matches `FtcRobotController` v12.0 `compileOptions` (`VERSION_1_8`) and OnBotJava, which still does not support later language levels.
 
 CI formats and compiles with Temurin **17**. Do not use `var`, records, sealed classes, text blocks, or `List.of` in SHIFT sources.
 

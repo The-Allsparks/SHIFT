@@ -99,7 +99,7 @@ public enum ControllerModel {
 
     /**
      * True when the hardware has rear buttons that the controller firmware
-     * remaps onto existing HID buttons. FTC RobotCore 11.2 has no paddle
+     * remaps onto existing HID buttons. FTC RobotCore 12.0 has no paddle
      * fields, so SHIFT never samples them as independent controls.
      */
     public boolean firmwarePaddles() {
