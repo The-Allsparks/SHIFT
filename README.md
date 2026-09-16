@@ -88,7 +88,7 @@ Robot-facing artifacts:
 
 `shift-ftc-stubs` is compile-only for this repository's desktop CI. Do not ship stubs to a Control Hub.
 
-Until published to Maven, clone this repository as a sibling of your FTC SDK project and `includeBuild('../SHIFT')`, or copy the two jars into `TeamCode/libs`.
+Until published to Maven, clone this repository as a sibling of your FTC SDK project and `includeBuild('../SHIFT')`, or copy the two jars into `TeamCode/libs`. Student path: [docs/INSTALL.md](docs/INSTALL.md). Teaching path: [docs/TEACHING.md](docs/TEACHING.md).
 
 ```gradle
 dependencies {
@@ -229,6 +229,8 @@ Run:
 
 | Document | Contents |
 | -------- | -------- |
+| [Install](docs/INSTALL.md) | Clone sibling of FTC SDK 12.0, includeBuild, jars; do not ship stubs |
+| [Teaching](docs/TEACHING.md) | Stick to named intent to team mix; Motor Test omit; usedFallback |
 | [Architecture](docs/architecture.md) | Pipeline, module boundaries, loop lifecycle |
 | [Configuration](docs/configuration.md) | JSON fields, specificity rules, validation |
 | [Intent design](docs/intent-design.md) | How to name intents |
