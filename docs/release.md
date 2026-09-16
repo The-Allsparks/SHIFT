@@ -25,12 +25,12 @@ Do not silently reinterpret schemaVersion 1 files. Breaking binding JSON require
 
 ## Branch protection (`main`)
 
-Classic branch protection with `enforce_admins` once the GitHub repo exists:
+`main` uses classic branch protection with `enforce_admins`:
 
-- Disallow force-push and branch deletion.
+- Force-push and branch deletion are disallowed.
 - Required checks (strict): `test (ubuntu-latest)`, `test (windows-latest)`, `docs-structure`, `sdk-compile`, `Analyze Java`.
-- Required approving review count: **0** until a second maintainer is available.
-- Require conversation resolution before merge.
+- Required approving review count: **0**.
+- Conversation resolution is required before merge.
 
 Do not add required checks that do not exist (no hardware CI). SHIFT does not command motors; desktop tests plus `compileAgainstFtcSdk` are the V1 bar.
 

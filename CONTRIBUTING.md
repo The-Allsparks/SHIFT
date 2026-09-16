@@ -38,13 +38,15 @@ Coding agents: read [AGENTS.md](AGENTS.md) before changing module boundaries or 
 
 ## Branch protection (`main`)
 
-Once the GitHub repo exists, `main` should require:
+`main` already requires those checks:
 
 | Rule | Policy |
 |------|--------|
 | Force push / delete | Disallowed |
+| `enforce_admins` | On |
 | Required status checks | `test (ubuntu-latest)`, `test (windows-latest)`, `docs-structure`, `sdk-compile`, `Analyze Java` |
 | Pull request reviews | Required approving review count is **0** (solo-maintainer workflow) |
+| Conversation resolution | Required before merge |
 
 Details: [docs/release.md](docs/release.md).
 
