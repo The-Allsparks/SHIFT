@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.1.1 - 2026-09-16
+
+First GitHub tag. GitHub never published `v0.1.0`. The FTC SDK 12.0.0 pin is a compatible patch on the 0.1.0 software V1.
+
 - Compile-check against FTC SDK **12.0.0** (BIOBUZZ). Gamepad fields SHIFT samples are unchanged from 11.2.
 - Sample digital trigger clicks as `LEFT_TRIGGER_PRESSED` / `RIGHT_TRIGGER_PRESSED`, distinct from analog `LEFT_TRIGGER` / `RIGHT_TRIGGER`.
 - `CompositeEventSink`, `ShiftInputListener`, and `CompositeInputListener` so TRACE, ECHO, and telemetry can listen without a SHIFT compile dependency.

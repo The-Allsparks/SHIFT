@@ -88,12 +88,20 @@ Robot-facing artifacts:
 
 `shift-ftc-stubs` is compile-only for this repository's desktop CI. Do not ship stubs to a Control Hub.
 
-Until published to Maven, clone this repository as a sibling of your FTC SDK project and `includeBuild('../SHIFT')`, or copy the two jars into `TeamCode/libs`. Student path: [docs/INSTALL.md](docs/INSTALL.md). Teaching path: [docs/TEACHING.md](docs/TEACHING.md).
+Until published to Maven, clone this repository at tag `v0.1.1` as a sibling of your FTC SDK project and `includeBuild('../SHIFT')`, or copy the two jars into `TeamCode/libs`. Student path: [docs/INSTALL.md](docs/INSTALL.md). Teaching path: [docs/TEACHING.md](docs/TEACHING.md).
+
+```text
+git clone --branch v0.1.1 https://github.com/The-Allsparks/SHIFT.git
+```
+
+```gradle
+includeBuild('../SHIFT')
+```
 
 ```gradle
 dependencies {
-    implementation files('libs/shift-core-0.1.0.jar')
-    implementation files('libs/shift-ftc-0.1.0.jar')
+    implementation files('libs/shift-core-0.1.1.jar')
+    implementation files('libs/shift-ftc-0.1.1.jar')
 }
 ```
 
