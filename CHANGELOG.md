@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Example person-role profiles and docs use `studenta` / `studentb` instead of personal names.
+- TRACE cookbook: TeamCode `TraceShiftAdapter` is fail-open and peeks `wouldAccept` before analog rows. SHIFT still does not import TRACE.
 
 ## 0.1.1 - 2026-09-16
 
