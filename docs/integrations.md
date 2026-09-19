@@ -87,7 +87,7 @@ Shift shift = FtcShift.builder(gamepad1, gamepad2)
     .build();
 ```
 
-BumbleBee's `TraceShiftAdapter` implements both interfaces, so one TeamCode object can be the event sink and the input listener. Use composites when TRACE, ECHO, and telemetry all need a copy.
+BumbleBee's `TraceShiftAdapter` wraps each callback in TRACE `FailOpen` and peeks `Trace.wouldAccept` before analog rows so ESSENTIAL downsampling does not allocate stick samples. That TeamCode class is the cookbook other libraries copy.
 
 Desktop proof: `ObservabilityFanoutTest` in `shift-core`.
 

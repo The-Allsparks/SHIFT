@@ -21,7 +21,7 @@ import org.allsparks.shift.intent.IntentRegistry;
  * or {@link org.allsparks.shift.Shift.Builder#loadProfile(Profile)}.
  *
  * <p>There is no coded cap on how many profiles a bank may hold. Group variants
- * with {@code person} / {@code set} or an id such as {@code garrett/offense}.
+ * with {@code person} / {@code set} or an id such as {@code studenta/offense}.
  */
 public final class ProfileBank {
     private final Map<String, Profile> byId;
