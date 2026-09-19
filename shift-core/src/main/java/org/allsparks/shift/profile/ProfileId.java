@@ -3,7 +3,7 @@ package org.allsparks.shift.profile;
 import java.util.Locale;
 
 /**
- * Person + set identity for a profile, e.g. {@code garrett/offense}.
+ * Person + set identity for a profile, e.g. {@code studenta/offense}.
  *
  * <p>{@code id} is the unique bank key. When {@code person} and {@code set} are
  * present (from JSON fields or an id of the form {@code person/set}), the

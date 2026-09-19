@@ -1,9 +1,9 @@
 {
   "$schema": "../../../schema/shift-profile-v1.json",
   "schemaVersion": 1,
-  "person": "sam",
+  "person": "studentb",
   "set": "general",
-  "name": "Sam general",
+  "name": "Student B general",
   "description": "Operator-only map. Person-role files for gamepad 2 must declare controllers.codriver.",
   "controllers": {
     "codriver": {
