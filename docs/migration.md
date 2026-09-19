@@ -59,7 +59,7 @@ The robot application still owns motors. SHIFT only says the operator asked for 
 
 ## Per-driver maps
 
-Traditional: copy-paste OpModes or `if (driver.equals("garrett"))` in `loop()`. SHIFT: one JSON file per person/set (`garrett/offense`), `ProfileBank.compose(driverId, operatorId)` at `init()`, `shift.activate(compiled)` between matches. JSON is never parsed in `update()`.
+Traditional: copy-paste OpModes or `if (driver.equals("studenta"))` in `loop()`. SHIFT: one JSON file per person/set (`studenta/offense`), `ProfileBank.compose(driverId, operatorId)` at `init()`, `shift.activate(compiled)` between matches. JSON is never parsed in `update()`.
 
 ## Edge detection
 

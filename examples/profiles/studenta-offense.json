@@ -1,10 +1,10 @@
 {
   "$schema": "../../../schema/shift-profile-v1.json",
   "schemaVersion": 1,
-  "person": "garrett",
-  "set": "general",
-  "name": "Garrett general",
-  "description": "Driver-only map. Compose with an operator profile at session start. Slow is RIGHT_BUMPER.",
+  "person": "studenta",
+  "set": "offense",
+  "name": "Student A offense",
+  "description": "Driver-only offense set. Slow is the digital left-trigger click, not analog LEFT_TRIGGER.",
   "controllers": {
     "driver": {
       "slot": 1,
@@ -26,7 +26,7 @@
           }
         },
         {
-          "source": "RIGHT_BUMPER",
+          "source": "LEFT_TRIGGER_PRESSED",
           "event": "WHILE_HELD",
           "intent": "drive.slow"
         }

@@ -80,8 +80,8 @@ jobs:
           test -f schema/shift-profile-v1.json
           test -f examples/profiles/competition-example.json
           test -f examples/profiles/fallback.json
-          test -f examples/profiles/garrett-general.json
-          test -f examples/profiles/garrett-offense.json
-          test -f examples/profiles/sam-general.json
+          test -f examples/profiles/studenta-general.json
+          test -f examples/profiles/studenta-offense.json
+          test -f examples/profiles/studentb-general.json
           test -f .github/workflows/codeql.yml
           test -f .github/ISSUE_TEMPLATE/phase_work.md
