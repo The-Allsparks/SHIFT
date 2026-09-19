@@ -29,12 +29,12 @@ jobs:
           cache: gradle
       - name: Grant Gradle permissions
         run: chmod +x gradlew
-      - uses: github/codeql-action/init@ff2f1c621b7f889edc0d3c761ac2e6a3f8cdb0dd # v4.37.7
+      - uses: github/codeql-action/init@4bd7200e1f146b1c937cae12d258b50f41a53cf8 # v4.38.0
         with:
           languages: java
           build-mode: manual
       - name: Build JVM modules for CodeQL
         run: ./gradlew :shift-core:classes :shift-ftc:classes :shift-examples:classes --no-daemon
-      - uses: github/codeql-action/analyze@ff2f1c621b7f889edc0d3c761ac2e6a3f8cdb0dd # v4.37.7
+      - uses: github/codeql-action/analyze@4bd7200e1f146b1c937cae12d258b50f41a53cf8 # v4.38.0
         with:
           category: "/language:java"
