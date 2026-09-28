@@ -77,7 +77,7 @@ Do **not** copy `shift-ftc-stubs` jars into `TeamCode/libs`. Stubs must not land
 
 ## After install
 
-In TeamCode `init()`: register intents, load a JSON profile, then `build()`. In `loop()`: `shift.update()` and read named intents. SHIFT does not call `setPower`. See [TEACHING.md](TEACHING.md).
+In TeamCode `init()`: register intents, read the packed JSON with `FtcShift.readAsset(assets, "shift/your-profile.json")`, `loadProfile`, then `build()`. In `loop()`: `shift.update()` and read named intents. SHIFT does not call `setPower`. See [TEACHING.md](TEACHING.md).
 
 ## Related
 

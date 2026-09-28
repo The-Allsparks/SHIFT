@@ -4,6 +4,15 @@ Every profile MUST declare `"schemaVersion": 1`. Other versions are rejected at 
 
 JSON Schema (editor validation and autocomplete): [`schema/shift-profile-v1.json`](../schema/shift-profile-v1.json).
 
+SHIFT owns how the file is read (UTF-8, Java 8 stream copy) and how it is validated. The robot project owns the file.
+
+```java
+String json = FtcShift.readAsset(hardwareMap.appContext.getAssets(), "shift/drive.json");
+shiftBuilder.loadProfile(json);
+```
+
+Classpath / tests: `ShiftProfiles.readResource(MyClass.class, "/path/profile.json")`. Desktop-only `Files.readString` is not the robot path.
+
 ## Root object
 
 | Field | Required | Description |

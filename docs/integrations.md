@@ -2,7 +2,7 @@
 
 SHIFT exposes two observer interfaces so TRACE, ECHO, and telemetry can listen without a SHIFT compile-time dependency on those libraries. TeamCode owns the adapters. This repository must not add a TRACE or ECHO Gradle dependency.
 
-The BumbleBee example lives in [The-Allsparks/FtcRobotController](https://github.com/The-Allsparks/FtcRobotController), not in this repo: `org.firstinspires.ftc.teamcode.TraceShiftAdapter`.
+The BumbleBee example lives in [The-Allsparks/FtcRobotController](https://github.com/The-Allsparks/FtcRobotController), not in this repo: `org.firstinspires.ftc.teamcode.ShiftAdapter`.
 
 ## ShiftEventSink vs ShiftInputListener
 
@@ -29,7 +29,7 @@ SHIFT (this repo)
         |
         v
 TeamCode adapter (FtcRobotController)
-  TraceShiftAdapter, optional ECHO adapter, telemetry
+  ShiftAdapter, optional ECHO adapter, telemetry
         |
         +---> TRACE
         +---> ECHO
@@ -37,7 +37,7 @@ TeamCode adapter (FtcRobotController)
 
 - SHIFT compiles against Java 8 and `org.json` only in `shift-core`. It does not import TRACE or ECHO.
 - TRACE and ECHO remain compile-time independent of SHIFT.
-- Glue lives in TeamCode. Do not move `TraceShiftAdapter` into this repository. Do not add an `implementation` of TRACE or ECHO to SHIFT Gradle files.
+- Glue lives in TeamCode. Do not move `ShiftAdapter` into this repository. Do not add an `implementation` of TRACE or ECHO to SHIFT Gradle files.
 
 A built-in TRACE implementation inside SHIFT is deferred. See [deferred.md](deferred.md).
 
@@ -45,11 +45,12 @@ A built-in TRACE implementation inside SHIFT is deferred. See [deferred.md](defe
 
 Prefixes are **team-defined**. SHIFT does not require a specific TRACE name.
 
-BumbleBee (`TraceShiftAdapter`) uses:
+BumbleBee (`ShiftAdapter`) uses:
 
 | Kind | TRACE name | Notes |
 | ---- | ---------- | ----- |
-| Stick samples | `SHIFT/<role>/LeftStickX` (also LeftStickY, RightStickX, RightBumper, LeftTrigger) | `role` is `driver` or `codriver` |
+| Stick samples | `SHIFT/<role>/<Control>` | Controls come from the loaded profile bindings, not a hardcoded stick list. `LEFT_STICK_X` becomes `LeftStickX`. `role` is `driver` or `codriver`. |
+| Named wishes | `SHIFT/Intent/<id>` | Walks `TeamIntents`. VECTOR2 adds `/X` and `/Y`. Dots in the SHIFT id become underscores (`drive.translation` → `drive_translation`). |
 | Discrete events | `SHIFT/<type>` such as `SHIFT/LAYER_CHANGED` | Events below INFO are dropped |
 
 Role prefixes:
@@ -61,13 +62,14 @@ SHIFT/codriver/...
 
 BumbleBee drops sink events below `ShiftEventLevel.INFO` so analog and DEBUG chatter does not flood the ESSENTIAL log. Set SHIFT `minimumEventLevel` and/or filter in the adapter.
 
-Example names a student can look up in AdvantageScope:
+Example names a student can look up in AdvantageScope (bumblebee-drive.json):
 
 ```text
 SHIFT/driver/LeftStickX
 SHIFT/driver/LeftStickY
 SHIFT/driver/RightStickX
-SHIFT/codriver/LeftStickX
+SHIFT/Intent/drive_translation/Y
+SHIFT/Intent/drive_boost
 ```
 
 ## ECHO
@@ -87,7 +89,7 @@ Shift shift = FtcShift.builder(gamepad1, gamepad2)
     .build();
 ```
 
-BumbleBee's `TraceShiftAdapter` wraps each callback in TRACE `FailOpen` and peeks `Trace.wouldAccept` before analog rows so ESSENTIAL downsampling does not allocate stick samples. That TeamCode class is the cookbook other libraries copy.
+BumbleBee's `ShiftAdapter` wraps each callback in TRACE `FailOpen` and peeks `Trace.wouldAccept` before analog rows so ESSENTIAL downsampling does not allocate stick samples. That TeamCode class is the cookbook other libraries copy.
 
 Desktop proof: `ObservabilityFanoutTest` in `shift-core`.
 
@@ -96,4 +98,4 @@ Desktop proof: `ObservabilityFanoutTest` in `shift-core`.
 - Do not import TRACE or ECHO from `shift-core` or `shift-ftc`.
 - Do not log every analog sample as a TRACE-level `ShiftEvent`. That is what `ShiftInputListener` is for, and even then record only the controls you need.
 - Do not block on the OpMode loop thread.
-- Do not treat this repo as the home of `TraceShiftAdapter`.
+- Do not treat this repo as the home of `ShiftAdapter`.

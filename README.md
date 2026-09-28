@@ -114,6 +114,9 @@ Compatibility: [docs/compatibility.md](docs/compatibility.md).
 ## Minimal example
 
 ```java
+String profileJson = FtcShift.readAsset(
+    hardwareMap.appContext.getAssets(), "shift/drive.json");
+
 Shift shift = FtcShift.builder(gamepad1, gamepad2)
     .registerIntents(MyRobotIntents.all())
     .loadProfile(profileJson)
@@ -135,7 +138,7 @@ if (intents.emitted("elevator.score.high")) {
 }
 ```
 
-Register intents before loading a profile. Unknown intent names fail at initialization, not while driving. `FtcShift.builder()` already enables the embedded idle fallback. Check `usedFallback()` after `build()`. To fail `init()` on a bad profile, use `Shift.builder()` without `fallbackToEmbedded()`.
+Register intents before loading a profile. Unknown intent names fail at initialization, not while driving. `FtcShift.readAsset` is the Hub-safe UTF-8 reader; TeamCode chooses the asset path. `FtcShift.builder()` already enables the embedded idle fallback. Check `usedFallback()` after `build()`. To fail `init()` on a bad profile, use `Shift.builder()` without `fallbackToEmbedded()`.
 
 ---
 
@@ -198,11 +201,11 @@ Full field reference: [docs/configuration.md](docs/configuration.md).
 ```java
 Shift shift = FtcShift.builder(gamepad1, gamepad2)
     .registerIntents(MyRobotIntents.all())
-    .loadProfile(json)
+    .loadProfile(FtcShift.readAsset(hardwareMap.appContext.getAssets(), "shift/drive.json"))
     .build();
 ```
 
-`FtcShift.builder` maps `gamepad1` to `driver` and `gamepad2` to `codriver`, installs `FtcFeedbackActuator`, and enables the embedded fallback. After `build()`, check `shift.usedFallback()`.
+`FtcShift.builder` maps `gamepad1` to `driver` and `gamepad2` to `codriver`, installs `FtcFeedbackActuator`, and enables the embedded fallback. After `build()`, check `shift.usedFallback()`. `FtcShift.readAsset` opens the TeamCode APK file; SHIFT owns charset and schema.
 
 `FtcGamepadDevice` snapshots public `Gamepad` fields once per `update()`. It does not use `Gamepad.copy()`. PlayStation aliases in the FTC SDK already mirror onto `a`/`b`/`x`/`y`; SHIFT aliases `CIRCLE`/`SOUTH`/`CREATE` to the same canonical control. DualSense-style pads (official DualSense and IWGAME wired PS-5/PC) also sample touchpad fingers. Digital trigger clicks (`left_trigger_pressed`) are `LEFT_TRIGGER_PRESSED`, distinct from analog `LEFT_TRIGGER`.
 

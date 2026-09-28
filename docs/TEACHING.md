@@ -38,7 +38,8 @@ Register intents and load the profile in `init()`. Call `shift.update()` once pe
 | Piece | Lives in |
 | ----- | -------- |
 | `includeBuild` + coordinates | FTC project `settings.gradle` and `TeamCode/build.gradle` ([INSTALL.md](INSTALL.md)) |
-| Drive profile JSON | FtcRobotController TeamCode `assets/shift/` |
+| UTF-8 reader + JSON schema | SHIFT (`ShiftProfiles`, `FtcShift.readAsset`, `schema/shift-profile-v1.json`) |
+| Drive profile JSON file | FtcRobotController TeamCode `assets/shift/` |
 | Composition root OpMode | FtcRobotController TeamCode (`BumbleBeeTeleOp`) |
 | Mix + `setPower` | TeamCode `MecanumDrive` |
 | Chassis motor lookup | TeamCode hardware map (not SHIFT) |
