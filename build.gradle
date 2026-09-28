@@ -5,7 +5,7 @@ plugins {
 ext {
     shiftGroup = 'org.allsparks'
     shiftVersion = '0.1.1'
-    junitBomVersion = '5.10.2'
+    junitBomVersion = '5.14.4'
     jsonVersion = '20260814'
     // FTC SDK 12.0.0 (BIOBUZZ 2026-2027). Source/target 1.8 matches
     // FtcRobotController v12.0 compileOptions. Gamepad fields SHIFT samples
