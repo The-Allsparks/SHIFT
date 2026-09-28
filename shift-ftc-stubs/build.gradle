@@ -2,9 +2,9 @@ plugins {
     id 'java-library'
 }
 
-// Compile-only stand-ins for FTC SDK Gamepad types used by shift-ftc and
-// shift-examples. NOT published. Robot projects must compile against the
-// official FTC SDK (org.firstinspires.ftc:RobotCore) instead.
+// Compile-only stand-ins for FTC Gamepad types and Android AssetManager used
+// by shift-ftc and shift-examples. NOT published. Robot projects must compile
+// against the official FTC SDK (org.firstinspires.ftc:RobotCore) instead.
 java {
     withSourcesJar()
     withJavadocJar()

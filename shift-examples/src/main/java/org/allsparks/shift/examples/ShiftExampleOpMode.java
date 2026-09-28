@@ -3,15 +3,12 @@ package org.allsparks.shift.examples;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.Charset;
 import org.allsparks.shift.Shift;
 import org.allsparks.shift.ftc.FtcShift;
 import org.allsparks.shift.intent.Intent;
 import org.allsparks.shift.intent.IntentFrame;
 import org.allsparks.shift.intent.Vector2;
+import org.allsparks.shift.profile.ShiftProfiles;
 
 /**
  * Example FTC OpMode showing how TeamCode consumes SHIFT.
@@ -39,7 +36,8 @@ public class ShiftExampleOpMode extends OpMode {
                 .registerFeedback("TARGET_ACQUIRED")
                 .registerFeedback("ACTION_REJECTED")
                 .registerFeedback("LAYER_CHANGED")
-                .loadProfile(readClasspath("/org/allsparks/shift/examples/competition-example.json"))
+                .loadProfile(ShiftProfiles.readResource(
+                        ShiftExampleOpMode.class, "/org/allsparks/shift/examples/competition-example.json"))
                 .build();
         telemetry.addData("shiftProfile", shift.profile().id());
         telemetry.addData("shiftFallback", shift.usedFallback());
@@ -79,30 +77,6 @@ public class ShiftExampleOpMode extends OpMode {
         }
         if (rotation == 0.0 && cor == 0.0) {
             return;
-        }
-    }
-
-    static String readClasspath(String resource) {
-        InputStream stream = ShiftExampleOpMode.class.getResourceAsStream(resource);
-        if (stream == null) {
-            throw new IllegalStateException("Missing example profile " + resource);
-        }
-        try {
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            byte[] buffer = new byte[256];
-            int read;
-            while ((read = stream.read(buffer)) >= 0) {
-                out.write(buffer, 0, read);
-            }
-            return new String(out.toByteArray(), Charset.forName("UTF-8"));
-        } catch (IOException ex) {
-            throw new IllegalStateException("Failed to read " + resource, ex);
-        } finally {
-            try {
-                stream.close();
-            } catch (IOException ignored) {
-                // ignore
-            }
         }
     }
 }

@@ -27,7 +27,7 @@ semantic feedback
 | Evaluate bindings and layers | Schedule subsystems or default commands |
 | Emit typed intents with metadata | Decide whether HELM overrides teleop |
 | Map semantic feedback to rumble/LED | Play audio (ECHO may listen to events) |
-| Validate profiles at load | Parse JSON during `update()` |
+| Read UTF-8 profile bytes and validate JSON at load | Choose the TeamCode asset path; parse JSON during `update()` |
 
 Downstream systems such as HELM, MIMIC, AMPER, BEACON, ECHO, and TRACE remain compile-time independent. They consume intents and events through their own adapters.
 
@@ -36,7 +36,7 @@ Downstream systems such as HELM, MIMIC, AMPER, BEACON, ECHO, and TRACE remain co
 | Module | May depend on | Must not |
 | ------ | ------------- | -------- |
 | `shift-core` | Java 8, `org.json` | FTC SDK, Android, `shift-ftc` |
-| `shift-ftc` | `shift-core` + FTC `Gamepad` | Stubs at runtime on the robot |
+| `shift-ftc` | `shift-core` + FTC `Gamepad` + `AssetManager` (init profile read) | Stubs at runtime on the robot |
 | `shift-ftc-stubs` | nothing | Publication, TeamCode |
 | `shift-examples` | `shift-ftc` | Production robot behavior |
 
@@ -74,7 +74,7 @@ Continuous analog/vector bindings are independent of digital specificity unless 
 
 ## Observability
 
-TeamCode adapter contract, TRACE prefixes, and the BumbleBee `TraceShiftAdapter` example: [integrations.md](integrations.md).
+TeamCode adapter contract, TRACE prefixes, and the BumbleBee `ShiftAdapter` example: [integrations.md](integrations.md).
 
 `ShiftEventSink` receives structured events. `CompositeEventSink` fans out to TRACE, ECHO, and telemetry adapters in registration order on the robot loop thread. Implementations must not block.
 

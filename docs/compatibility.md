@@ -36,7 +36,7 @@ CI formats and compiles with Temurin **17**. Do not use `var`, records, sealed c
 
 ## Android
 
-minSdk 24, as required by the FTC SDK. SHIFT core is pure Java. The FTC adapter uses only `Gamepad`, which is available on the Robot Controller.
+minSdk 24, as required by the FTC SDK. SHIFT core is pure Java. Do not call `Files.readString()` or `File.toPath()` on the Hub. The FTC adapter snapshots `Gamepad` every loop and uses `AssetManager.open` only at init to read a TeamCode profile asset.
 
 Do not add Android-only APIs to `shift-core`.
 

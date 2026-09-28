@@ -2,8 +2,9 @@
 
 ## Unreleased
 
+- SHIFT owns UTF-8 profile reading (`ShiftProfiles`, `FtcShift.readAsset`). TeamCode supplies the asset path. Hub-safe Java 8 stream copy; no `Files.readString`.
 - Example person-role profiles and docs use `studenta` / `studentb` instead of personal names.
-- TRACE cookbook: TeamCode `TraceShiftAdapter` is fail-open and peeks `wouldAccept` before analog rows. SHIFT still does not import TRACE.
+- TRACE cookbook: TeamCode `ShiftAdapter` is fail-open and peeks `wouldAccept` before analog rows. SHIFT still does not import TRACE.
 
 ## 0.1.1 - 2026-09-16
 

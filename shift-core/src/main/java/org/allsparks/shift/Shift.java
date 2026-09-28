@@ -1,9 +1,6 @@
 package org.allsparks.shift;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -36,6 +33,7 @@ import org.allsparks.shift.observe.ShiftInputListener;
 import org.allsparks.shift.profile.ControllerAssignment;
 import org.allsparks.shift.profile.Profile;
 import org.allsparks.shift.profile.ProfileLoader;
+import org.allsparks.shift.profile.ShiftProfiles;
 import org.allsparks.shift.trigger.BindingEvent;
 import org.allsparks.shift.trigger.EdgeDetector;
 
@@ -531,27 +529,7 @@ public final class Shift {
     }
 
     public static String embeddedFallbackJson() {
-        InputStream stream = Shift.class.getResourceAsStream(EMBEDDED_FALLBACK_RESOURCE);
-        if (stream == null) {
-            throw new IllegalStateException("Missing embedded fallback profile " + EMBEDDED_FALLBACK_RESOURCE);
-        }
-        try {
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            byte[] buffer = new byte[256];
-            int read;
-            while ((read = stream.read(buffer)) >= 0) {
-                out.write(buffer, 0, read);
-            }
-            return new String(out.toByteArray(), Charset.forName("UTF-8"));
-        } catch (IOException ex) {
-            throw new IllegalStateException("Failed to read embedded fallback profile", ex);
-        } finally {
-            try {
-                stream.close();
-            } catch (IOException ignored) {
-                // ignore
-            }
-        }
+        return ShiftProfiles.readResource(Shift.class, EMBEDDED_FALLBACK_RESOURCE);
     }
 
     /**
@@ -610,6 +588,14 @@ public final class Shift {
             return this;
         }
 
+        /**
+         * Reads UTF-8 from {@code stream} immediately (and closes it). JSON is
+         * still validated at {@link #build()}, not during {@link Shift#update()}.
+         */
+        public Builder loadProfile(InputStream stream, String sourceName) {
+            return loadProfile(ShiftProfiles.readUtf8(stream, sourceName));
+        }
+
         public Builder loadProfile(Profile profile) {
             if (profile == null) {
                 throw new IllegalArgumentException("Profile is required");
@@ -665,7 +651,7 @@ public final class Shift {
             }
             if (preferredJson == null || preferredJson.trim().isEmpty()) {
                 throw new IllegalStateException(
-                        "SHIFT requires a profile. Call loadProfile(json) or loadProfile(profile).");
+                        "SHIFT requires a profile. Call loadProfile(json), loadProfile(stream, source), or loadProfile(profile).");
             }
             ProfileLoader loader = new ProfileLoader(intents, feedback);
             try {

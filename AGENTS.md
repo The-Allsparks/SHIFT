@@ -15,7 +15,7 @@ SHIFT is the Semantic Human Input Framework for Teleoperation. It translates ope
 | Module | May depend on | Must not |
 | ------ | ------------- | -------- |
 | `shift-core` | Java 8, org.json | FTC SDK, Android, `shift-ftc` |
-| `shift-ftc` | `shift-core` + FTC Gamepad | Stubs on the robot classpath |
+| `shift-ftc` | `shift-core` + FTC Gamepad + AssetManager (init profile read) | Stubs on the robot classpath |
 | `shift-examples` | `shift-ftc` | Real motor writes |
 
 `Shift.update()` must not parse JSON, hit the filesystem, start threads, or block.
